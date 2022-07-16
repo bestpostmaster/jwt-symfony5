@@ -60,5 +60,8 @@
             "allow-contrib": false,
             "require": "4.4.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "v1.39.0"
     }
 }
