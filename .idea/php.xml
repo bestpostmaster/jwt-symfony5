@@ -61,6 +61,10 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/sql-formatter" />
       <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/doctrine-bridge" />
+      <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
+      <path value="$PROJECT_DIR$/vendor/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/migrations" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-code" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
