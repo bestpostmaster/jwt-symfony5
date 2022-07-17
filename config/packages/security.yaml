@@ -31,6 +31,8 @@ security:
             provider: app_user_provider
 
     access_control:
+        - { path: ^/public,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/admin,       roles: ROLE_ADMIN }
+        - { path: ^/api/files,       roles: ROLE_USER }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/home,       roles: ROLE_USER }

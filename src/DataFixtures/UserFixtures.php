@@ -22,12 +22,12 @@ class UserFixtures extends Fixture
             [
                 'login' => 'admin',
                 'roles' => ['ROLE_ADMIN'],
-                'pass' => 'f56f5h4f6g5h4f56df5gh4'
+                'pass' => 'f56f5h4f6g5h4f56df5gh4_admin'
             ],
             [
                 'login' => 'user',
                 'roles' => ['ROLE_USER'],
-                'pass' => 'fd54gh5fg4h5fh4f5g54hf5'
+                'pass' => 'f56f5h4f6g5h4f56df5gh4'
             ]
         ];
 
