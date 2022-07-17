@@ -3,6 +3,7 @@ lexik/jwt-authentication-bundle with Symfony 4.4
 Installation
 -------------------------------------------------------------------
 composer install
+php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 php bin/console lexik:jwt:generate-keypair
