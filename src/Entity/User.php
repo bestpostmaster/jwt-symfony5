@@ -16,19 +16,19 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @groups("user:read")
+     * @groups("user:read", "file:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @groups("user:read")
+     * @groups("user:read", "file:read")
      */
     private $login;
 
     /**
      * @ORM\Column(type="json")
-     * @groups("user:read")
+     * @groups("user:read", "file:read")
      */
     private $roles = [];
 
@@ -37,6 +37,23 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=HostedFile::class, mappedBy="user")
+     */
+    private $files;
+
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    public function setFiles($files): self
+    {
+        $this->files = $files;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {

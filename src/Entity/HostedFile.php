@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\HostedFileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=HostedFileRepository::class)
@@ -14,67 +15,91 @@ class HostedFile
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @groups("file:read")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @groups("file:read")
      */
-    private $path;
+    private string $realDir;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @groups("file:read")
+     */
+    private string $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @groups("file:read")
+     */
+    private string $clientName;
 
     /**
      * @ORM\Column(type="datetime")
+     * @groups("file:read")
      */
-    private $uploadDate;
+    private \DateTimeInterface $uploadDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="files")
+     * @groups("file:read")
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @groups("file:read")
      */
-    private $virtualDirectory;
+    private string $virtualDirectory;
 
     /**
      * @ORM\Column(type="bigint")
+     * @groups("file:read")
      */
     private $size;
 
     /**
      * @ORM\Column(type="boolean")
+     * @groups("file:read")
      */
     private $scaned;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @groups("file:read")
      */
     private $description;
 
     /**
      * @ORM\Column(type="bigint")
+     * @groups("file:read")
      */
     private $downloadCounter;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @groups("file:read")
      */
     private $url;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @groups("file:read")
      */
     private $uploadLocalisation;
 
     /**
      * @ORM\Column(type="boolean")
+     * @groups("file:read")
      */
     private $copyrightIssue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @groups("file:read")
      */
     private $conversionsAvailable;
 
@@ -83,14 +108,14 @@ class HostedFile
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getRealDir(): ?string
     {
-        return $this->path;
+        return $this->realDir;
     }
 
-    public function setPath(string $path): self
+    public function setRealDir(string $realDir): self
     {
-        $this->path = $path;
+        $this->realDir = $realDir;
 
         return $this;
     }
@@ -136,7 +161,7 @@ class HostedFile
         return $this->size;
     }
 
-    public function setSize(string $size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -225,5 +250,37 @@ class HostedFile
         $this->conversionsAvailable = $conversionsAvailable;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientName(): string
+    {
+        return $this->clientName;
+    }
+
+    /**
+     * @param string $clientName
+     */
+    public function setClientName(string $clientName): void
+    {
+        $this->clientName = $clientName;
     }
 }
