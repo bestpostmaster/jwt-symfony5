@@ -43,6 +43,44 @@ class User implements UserInterface
      */
     private $files;
 
+    /**
+     * @ORM\Column(type="integer", length=60, nullable=true)
+     */
+    private int $totalSpaceUsedMo;
+
+    /**
+     * @return int
+     */
+    public function getTotalSpaceUsedMo(): int
+    {
+        return $this->totalSpaceUsedMo;
+    }
+
+    /**
+     * @param int $totalSpaceUsedMo
+     */
+    public function setTotalSpaceUsedMo(int $totalSpaceUsedMo): void
+    {
+        $this->totalSpaceUsedMo = $totalSpaceUsedMo;
+    }
+
+    public function getAuthorizedSizeMo(): ?int
+    {
+        return $this->authorizedSizeMo;
+    }
+
+    public function setAuthorizedSizeMo(int $authorizedSizeMo): self
+    {
+        $this->authorizedSizeMo = $authorizedSizeMo;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\Column(type="integer", length=60, nullable=true)
+     */
+    private $authorizedSizeMo = 500000000;
+
     public function getFiles()
     {
         return $this->files;

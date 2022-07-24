@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\HostedFileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -47,7 +48,7 @@ class HostedFile
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="files")
      * @groups("file:read")
      */
-    private User $user;
+    private UserInterface $user;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -132,12 +133,12 @@ class HostedFile
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?UserInterface $user): self
     {
         $this->user = $user;
 
