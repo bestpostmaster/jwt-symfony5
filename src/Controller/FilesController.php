@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\HostedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\HostedFileRepository;
 use Psr\Log\LoggerInterface;
@@ -75,25 +77,43 @@ class FilesController extends AbstractController
     }
 
     /**
-     * TO DO
-     * @Route("/api/files/download", name="app_files_download")
+     * @Route("/api/files/download/{url}", name="app_files_download")
      */
-    public function download(HostedFileRepository $hostedFileRepository): Response
+    public function download(Request $request, HostedFileRepository $hostedFileRepository): BinaryFileResponse
     {
         $userId = ($this->getUser())->getId();
+        $url = $request->get("url");
 
-        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            return $this->json($hostedFileRepository->findAll(), 200, [], ['groups' => 'file:read']);
+        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            throw new \Exception('No user logged in');
         }
 
-        return $this->json($hostedFileRepository->findBy(['user' => $userId]), 200, [], ['groups' => 'file:read']);
+        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $result = $hostedFileRepository->findOneBy(['url' => $url]);
+        }
+        else {
+            $result = $hostedFileRepository->findOneBy(['url' => $url, 'user' => $userId]);
+        }
+
+        if(!$result) {
+            throw $this->createNotFoundException('The file does not exist');
+        }
+
+        $response = new BinaryFileResponse($this->getParameter('kernel.project_dir').$result->getRealDir().$result->getName());
+        $extension = (explode('.',$result->getName()))[1] ?? '';
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $result->getDescription().'.'.$extension
+        );
+
+        return $response;
     }
 
     /**
      * TO DO
-     * @Route("/api/files/delete", name="app_files_delete")
+     * @Route("/api/files/delete/{fileId}", name="app_files_delete")
      */
-    public function delete(HostedFileRepository $hostedFileRepository): Response
+    public function deleteById(HostedFileRepository $hostedFileRepository): Response
     {
         $userId = ($this->getUser())->getId();
 
