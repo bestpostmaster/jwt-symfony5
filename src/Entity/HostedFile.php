@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\HostedFileRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -42,7 +43,13 @@ class HostedFile
      * @ORM\Column(type="datetime")
      * @groups("file:read")
      */
-    private \DateTimeInterface $uploadDate;
+    private DateTimeInterface $uploadDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @groups("file:read")
+     */
+    private ?DateTimeInterface $expirationDate;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="files")
@@ -105,6 +112,16 @@ class HostedFile
      */
     private $conversionsAvailable;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $filePassword;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private array $authorizedUsers;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,12 +139,12 @@ class HostedFile
         return $this;
     }
 
-    public function getUploadDate(): ?\DateTimeInterface
+    public function getUploadDate(): DateTimeInterface
     {
         return $this->uploadDate;
     }
 
-    public function setUploadDate(\DateTimeInterface $uploadDate): self
+    public function setUploadDate(DateTimeInterface $uploadDate): self
     {
         $this->uploadDate = $uploadDate;
 
@@ -284,5 +301,53 @@ class HostedFile
     public function setClientName(string $clientName): void
     {
         $this->clientName = $clientName;
+    }
+
+    /**
+     * @return ?DateTimeInterface
+     */
+    public function getExpirationDate(): ?DateTimeInterface
+    {
+        return $this->expirationDate;
+    }
+
+    /**
+     * @param ?DateTimeInterface $expirationDate
+     */
+    public function setExpirationDate(?DateTimeInterface $expirationDate): void
+    {
+        $this->expirationDate = $expirationDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFilePassword(): ?string
+    {
+        return $this->filePassword;
+    }
+
+    /**
+     * @param string|null $filePassword
+     */
+    public function setFilePassword(?string $filePassword): void
+    {
+        $this->filePassword = $filePassword;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAuthorizedUsers(): array
+    {
+        return $this->authorizedUsers;
+    }
+
+    /**
+     * @param array $authorizedUsers
+     */
+    public function setAuthorizedUsers(array $authorizedUsers): void
+    {
+        $this->authorizedUsers = $authorizedUsers;
     }
 }

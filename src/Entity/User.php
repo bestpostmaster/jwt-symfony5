@@ -45,14 +45,20 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="integer", length=60, nullable=true)
+     * @groups("user:read", "file:read")
      */
-    private int $totalSpaceUsedMo;
+    private int $totalSpaceUsedMo = 0;
 
     /**
      * @ORM\Column(type="integer", length=60, nullable=true)
+     * @groups("user:read", "file:read")
      */
-    private $authorizedSizeMo = 500000000;
+    private $authorizedSizeMo = 100;
 
+    /**
+     * @ORM\Column(type="datetime", length=60, nullable=true)
+     * @groups("user:read", "file:read")
+     */
     private \DateTimeInterface $registrationDate;
 
     /**

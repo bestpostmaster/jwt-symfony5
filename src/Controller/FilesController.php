@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\HostedFileRepository;
 use Psr\Log\LoggerInterface;
+use App\Service\Converter;
 
 class FilesController extends AbstractController
 {
@@ -61,7 +62,8 @@ class FilesController extends AbstractController
         $file->setUser($this->getUser());
         $file->setSize(filesize($directory.$name)/1000000);
         $file->setScaned(false);
-        $file->setDescription($receivedFile->getClientOriginalName());
+        $file->setDescription($request->get("description") ?? $receivedFile->getClientOriginalName());
+        $file->setFilePassword($request->get("filePassword") ?? '');
         $file->setDownloadCounter(0);
         $file->setUrl(md5(uniqid(mt_rand(), true)));
         $file->setUploadLocalisation($_SERVER['REMOTE_ADDR']);
@@ -144,14 +146,17 @@ class FilesController extends AbstractController
      * TO DO
      * @Route("/api/files/convert/{fileId}/{convertTo}", name="app_files_convert")
      */
-    public function convert(HostedFileRepository $hostedFileRepository): Response
+    public function convert(Request $request, Converter $converter): Response
     {
-        $userId = ($this->getUser())->getId();
-
-        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            return $this->json($hostedFileRepository->findAll(), 200, [], ['groups' => 'file:read']);
+        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            throw new \Exception('No user logged in');
         }
 
-        return $this->json($hostedFileRepository->findBy(['user' => $userId]), 200, [], ['groups' => 'file:read']);
+        $fileId = $request->get("fileId");
+        $convertTo = $request->get("convertTo");
+
+        $conversionStatus = $converter->convert($fileId, $convertTo);
+
+        return $this->json([], 200, [], ['groups' => 'file:read']);
     }
 }
