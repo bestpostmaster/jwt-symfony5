@@ -128,7 +128,7 @@ class FilesController extends AbstractController
             $result = $hostedFileRepository->findOneBy(['id' => $id]);
         }
         else {
-            $result = $hostedFileRepository->findOneBy(['url' => $id, 'user' => $userId]);
+            $result = $hostedFileRepository->findOneBy(['id' => $id, 'user' => $userId]);
         }
 
         if(!$result) {
@@ -138,6 +138,12 @@ class FilesController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($result);
         $manager->flush();
+
+        $fullPath = $this->getParameter('kernel.project_dir') . '/public/up/'.$result->getName();
+
+        if(file_exists($fullPath)) {
+            unlink($this->getParameter('kernel.project_dir') . '/public/up/' . $result->getName());
+        }
 
         return $this->json([], 200);
     }

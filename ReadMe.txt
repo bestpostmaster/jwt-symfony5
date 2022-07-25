@@ -30,3 +30,7 @@ symfony console make:migration & bin/console doctrine:migrations:migrate & symfo
 
 After update fixtures, use this command :
 php bin/console doctrine:fixtures:load
+
+JSON Collection for Postman
+-------------------------------------------------------------------
+https://www.postman.com/collections/880b957ed4b9cdded6bf

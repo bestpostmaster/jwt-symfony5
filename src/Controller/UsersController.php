@@ -18,12 +18,25 @@ class UsersController extends AbstractController
     {
         $this->passwordEncoder = $passwordEncoder;
     }
+
     /**
      * @Route("/api/admin/users", name="app_users")
      */
-    public function index(UserRepository $userRepository): Response
+    public function getUsers(UserRepository $userRepository): Response
     {
         return $this->json($userRepository->findAll(), 200, [], ['groups' => 'user:read']);
+    }
+
+    /**
+     * @Route("/api/admin/user/{userId}", name="app_user_infos")
+     */
+    public function getUserInfos(Request $request, UserRepository $userRepository): Response
+    {
+        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw new \Exception('Admin only !');
+        }
+
+        return $this->json($userRepository->findOneBy(['id'=>$request->get('userId')]), 200, [], ['groups' => 'user:read']);
     }
 
     /**
