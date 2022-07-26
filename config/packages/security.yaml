@@ -34,6 +34,7 @@ security:
         - { path: ^/public,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/status, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/admin,       roles: ROLE_ADMIN }
         - { path: ^/api/files,       roles: ROLE_USER }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
