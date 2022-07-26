@@ -113,7 +113,7 @@ class FilesController extends AbstractController
 
     /**
      * TO DO
-     * @Route("/api/files/delete/{fileId}", name="app_files_delete")
+     * @Route("/api/files/delete/{fileId}", name="app_files_delete", methods={"DELETE"})
      */
     public function deleteById(Request $request, HostedFileRepository $hostedFileRepository): Response
     {
