@@ -11,10 +11,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class HostedFileFixtures extends Fixture implements DependentFixtureInterface
 {
+    private string $hostingDirectory;
     private string $projectDirectory;
 
-    public function __construct(string $projectDirectory)
+    public function __construct(string $hostingDirectory, string $projectDirectory)
     {
+        $this->hostingDirectory = $hostingDirectory;
         $this->projectDirectory = $projectDirectory;
     }
     public function load(ObjectManager $manager): void
@@ -24,7 +26,6 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
 
         foreach($files as $item) {
             $file = new HostedFile();
-            $file->setRealDir($item['realDir']);
             $file->setName($item['name']);
             $file->setClientName($item['clientName']);
             $file->setUploadDate($item['uploadDate']);
@@ -53,7 +54,6 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
 
         $files = [
             [
-                'realDir' => '/public/up/',
                 'name' => $names[0],
                 'clientName' => 'test-cli-name'.$users[0]->getId().'.jpg',
                 'uploadDate' => new \DateTime('now'),
@@ -70,7 +70,6 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
                 'virtualDirectory' => 'test-dir'.$users[0]->getId()
             ],
             [
-                'realDir' => '/public/up/',
                 'name' => $names[1],
                 'clientName' => 'test'.$users[0]->getId().'.jpg',
                 'uploadDate' => new \DateTime('now'),
@@ -87,7 +86,6 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
                 'virtualDirectory' => 'test-dir'.$users[0]->getId()
             ],
             [
-                'realDir' => '/public/up/',
                 'name' => $names[2],
                 'clientName' => 'test-cli-name'.$users[1]->getId().'.jpg',
                 'uploadDate' => new \DateTime('now'),
@@ -104,7 +102,6 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
                 'virtualDirectory' => 'test-dir'.$users[1]->getId()
             ],
             [
-                'realDir' => '/public/up/',
                 'name' => $names[3],
                 'clientName' => 'test'.$users[1]->getId().'.jpg',
                 'uploadDate' => new \DateTime('now'),
@@ -136,14 +133,14 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
 
     public function copyFilesFixtures(): void {
 
-        if (!is_dir($this->projectDirectory.'/public/up/')) {
-            mkdir($this->projectDirectory.'/public/up/');
+        if (!is_dir($this->hostingDirectory)) {
+            mkdir($this->hostingDirectory);
         }
 
         $names = $this->getFilesNames();
 
         foreach ($names as $name) {
-            copy($this->projectDirectory.'/src/DataFixtures/Files/'.$name, $this->projectDirectory.'/public/up/'.$name);
+            copy($this->projectDirectory.'/src/DataFixtures/Files/'.$name, $this->hostingDirectory.$name);
         }
     }
 

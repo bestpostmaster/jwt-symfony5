@@ -15,12 +15,20 @@ use App\Service\Converter;
 
 class FilesController extends AbstractController
 {
+    private string $hostingDirectory;
+
+    public function __construct(string $hostingDirectory)
+    {
+        $this->hostingDirectory = $hostingDirectory;
+    }
+
     /**
      * @Route("/api/files", name="app_files")
      */
-    public function index(HostedFileRepository $hostedFileRepository): Response
+    public function index(HostedFileRepository $hostedFileRepository, string $hostingDirectory): Response
     {
         $userId = ($this->getUser())->getId();
+        $this->hostingDirectory = $hostingDirectory;
 
         if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->json($hostedFileRepository->findAll(), 200, [], ['groups' => 'file:read']);
@@ -33,7 +41,7 @@ class FilesController extends AbstractController
      * TO DO
      * @Route("/api/files/upload", name="app_files_upload")
      */
-    public function upload(Request $request, LoggerInterface $logger): Response
+    public function upload(Request $request, LoggerInterface $logger, string $hostingDirectory, string $projectDirectory): Response
     {
         if (empty($request->files) || !($request->files)->get("file")) {
             throw new \Exception('No file sent');
@@ -47,25 +55,23 @@ class FilesController extends AbstractController
         }
 
         $name = md5(uniqid(mt_rand(), true)).'.'.strtolower($receivedFile->getClientOriginalExtension());
-        $directory = $this->getParameter('kernel.project_dir') . '/public/up/';
-        $receivedFile->move($directory, $name);
+        $receivedFile->move($this->hostingDirectory, $name);
 
-        if (!file_exists($directory.$name)) {
+        if (!file_exists($this->hostingDirectory.$name)) {
             throw new \Exception('Upload error...');
         }
 
         $file = new HostedFile();
-        $file->setRealDir('/public/up/');
         $file->setName($name);
         $file->setClientName($receivedFile->getClientOriginalName());
         $file->setUploadDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         $file->setUser($this->getUser());
-        $file->setSize(filesize($directory.$name)/1000000);
+        $file->setSize(filesize($this->hostingDirectory.$name)/1000000);
         $file->setScaned(false);
         $file->setDescription($request->get("description") ?? $receivedFile->getClientOriginalName());
         $file->setFilePassword($request->get("filePassword") ?? '');
         $file->setDownloadCounter(0);
-        $file->setUrl(md5(uniqid(mt_rand(), true)));
+        $file->setUrl(md5(uniqid(mt_rand(), true)).md5(uniqid(mt_rand(), true)));
         $file->setUploadLocalisation($_SERVER['REMOTE_ADDR']);
         $file->setCopyrightIssue(false);
         $file->setConversionsAvailable('');
@@ -101,7 +107,7 @@ class FilesController extends AbstractController
             throw $this->createNotFoundException('The file does not exist');
         }
 
-        $response = new BinaryFileResponse($this->getParameter('kernel.project_dir').$result->getRealDir().$result->getName());
+        $response = new BinaryFileResponse($this->hostingDirectory.$result->getName());
         $extension = (explode('.',$result->getName()))[1] ?? '';
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
@@ -112,7 +118,32 @@ class FilesController extends AbstractController
     }
 
     /**
-     * TO DO
+     * @Route("/api/files/file-info/{fileId}", name="app_file_info")
+     */
+    public function fileInfo(Request $request, HostedFileRepository $hostedFileRepository): Response
+    {
+        $userId = ($this->getUser())->getId();
+        $id = $request->get("fileId");
+
+        if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            throw new \Exception('No user logged in');
+        }
+
+        if($this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $result = $hostedFileRepository->findOneBy(['id' => $id]);
+        }
+        else {
+            $result = $hostedFileRepository->findOneBy(['id' => $id, 'user' => $userId]);
+        }
+
+        if(!$result) {
+            throw $this->createNotFoundException('The file does not exist');
+        }
+
+        return $this->json($result, 200, [], ['groups' => 'file:read']);
+    }
+
+    /**
      * @Route("/api/files/delete/{fileId}", name="app_files_delete", methods={"DELETE"})
      */
     public function deleteById(Request $request, HostedFileRepository $hostedFileRepository): Response
@@ -139,10 +170,10 @@ class FilesController extends AbstractController
         $manager->remove($result);
         $manager->flush();
 
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public/up/'.$result->getName();
+        $fullPath = $this->hostingDirectory.$result->getName();
 
         if(file_exists($fullPath)) {
-            unlink($this->getParameter('kernel.project_dir') . '/public/up/' . $result->getName());
+            unlink($this->hostingDirectory . $result->getName());
         }
 
         return $this->json([], 200);

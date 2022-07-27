@@ -25,12 +25,6 @@ class HostedFile
      * @ORM\Column(type="string", length=255)
      * @groups("file:read")
      */
-    private string $realDir;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @groups("file:read")
-     */
     private string $name;
 
     /**
@@ -125,18 +119,6 @@ class HostedFile
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRealDir(): ?string
-    {
-        return $this->realDir;
-    }
-
-    public function setRealDir(string $realDir): self
-    {
-        $this->realDir = $realDir;
-
-        return $this;
     }
 
     public function getUploadDate(): DateTimeInterface

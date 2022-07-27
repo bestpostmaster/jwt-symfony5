@@ -39,6 +39,248 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $phoneNumber;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $country;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $zipCode;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $preferredLanguage;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $typeOfAccount;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $avatarPicture;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateOfBirth;
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber(string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry(string $country): void
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZipCode(): string
+    {
+        return $this->zipCode;
+    }
+
+    /**
+     * @param string $zipCode
+     */
+    public function setZipCode(string $zipCode): void
+    {
+        $this->zipCode = $zipCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreferredLanguage(): string
+    {
+        return $this->preferredLanguage;
+    }
+
+    /**
+     * @param string $preferredLanguage
+     */
+    public function setPreferredLanguage(string $preferredLanguage): void
+    {
+        $this->preferredLanguage = $preferredLanguage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeOfAccount(): string
+    {
+        return $this->typeOfAccount;
+    }
+
+    /**
+     * @param string $typeOfAccount
+     */
+    public function setTypeOfAccount(string $typeOfAccount): void
+    {
+        $this->typeOfAccount = $typeOfAccount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvatarPicture(): string
+    {
+        return $this->avatarPicture;
+    }
+
+    /**
+     * @param string $avatarPicture
+     */
+    public function setAvatarPicture(string $avatarPicture): void
+    {
+        $this->avatarPicture = $avatarPicture;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateOfBirth(): string
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param string $dateOfBirth
+     */
+    public function setDateOfBirth(string $dateOfBirth): void
+    {
+        $this->dateOfBirth = $dateOfBirth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsBanned()
+    {
+        return $this->isBanned;
+    }
+
+    /**
+     * @param string $isBanned
+     */
+    public function setIsBanned($isBanned): void
+    {
+        $this->isBanned = $isBanned;
+    }
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isBanned = false;
+
+    /**
      * @ORM\OneToMany(targetEntity=HostedFile::class, mappedBy="user")
      */
     private $files;

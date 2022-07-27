@@ -41,3 +41,8 @@ php bin/console doctrine:schema:create --env=test
 php bin/console doctrine:fixtures:load --env=test
 php bin/phpunit
 
+After every entity modification use this command
+-------------------------------------------------------------------
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
+
