@@ -5,6 +5,10 @@ Installation
 composer install
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
+
+Put the correct path in .env , this folder wille be used to host files :
+HOSTING_DIRECTORY=path/to/hosting/directory/
+
 php bin/console doctrine:fixtures:load
 php bin/console lexik:jwt:generate-keypair
 symfony server:start
