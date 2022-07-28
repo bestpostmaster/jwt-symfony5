@@ -27,7 +27,10 @@ class UsersController extends AbstractController
      */
     public function getUsers(UserRepository $userRepository): Response
     {
-        return $this->json($userRepository->findAll(), 200, [], ['groups' => 'user:read']);
+        $users = $userRepository->findAll();
+        $this->denyAccessUnlessGranted('USER_VIEW_ALL', $users);
+
+        return $this->json($users, 200, [], ['groups' => 'user:read']);
     }
 
     /**
