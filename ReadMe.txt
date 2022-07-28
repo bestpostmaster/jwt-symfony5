@@ -1,4 +1,5 @@
-lexik/jwt-authentication-bundle with Symfony 4.4
+This API provides a complete system for authenticating via JWT and uploading files.
+An admin exists, and he has endpoints that allow him to manage users
 
 Installation
 -------------------------------------------------------------------
@@ -37,7 +38,7 @@ JSON Collection for Postman
 -------------------------------------------------------------------
 https://www.postman.com/collections/880b957ed4b9cdded6bf
 
-Tests
+Run PHPUnit Tests
 -------------------------------------------------------------------
 php bin/console doctrine:database:create --env=test
 php bin/console doctrine:schema:drop --force --env=test
