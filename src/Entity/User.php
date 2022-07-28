@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -41,60 +42,70 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $email;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $phoneNumber;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $city;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $country;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $zipCode;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $preferredLanguage;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $typeOfAccount;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $description;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
+     * @groups("user:read", "file:read")
      */
-    private $avatarPicture;
+    private string $avatarPicture;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="datetime", nullable=true)
+     * @groups("user:read", "file:read")
      */
     private $dateOfBirth;
 
