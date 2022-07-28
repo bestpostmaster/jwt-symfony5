@@ -98,6 +98,11 @@ class User implements UserInterface
      */
     private $dateOfBirth;
 
+    public function getUserIdentifier(): string
+    {
+        return $this->login;
+    }
+
     /**
      * @return string
      */
