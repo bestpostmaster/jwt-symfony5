@@ -40,74 +40,92 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $email;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $phoneNumber;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $city;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $country;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $zipCode;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $preferredLanguage;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $typeOfAccount;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $description;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="string", nullable=true)
      * @groups("user:read", "file:read")
      */
     private string $avatarPicture;
 
     /**
-     * @var string The hashed password
      * @ORM\Column(type="datetime", nullable=true)
      * @groups("user:read", "file:read")
      */
     private $dateOfBirth;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isBanned = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=HostedFile::class, mappedBy="user")
+     */
+    private $files;
+
+    /**
+     * @ORM\Column(type="integer", length=60, nullable=true)
+     * @groups("user:read", "file:read")
+     */
+    private int $totalSpaceUsedMo = 0;
+
+    /**
+     * @ORM\Column(type="integer", length=60, nullable=true)
+     * @groups("user:read", "file:read")
+     */
+    private $authorizedSizeMo = 100;
+
+    /**
+     * @ORM\Column(type="datetime", length=60, nullable=true)
+     * @groups("user:read", "file:read")
+     */
+    private \DateTimeInterface $registrationDate;
 
     public function getUserIdentifier(): string
     {
@@ -127,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function setEmail(string $email): void
     {
-        $this->email = $email;
+        $this->email = strtolower($email);
     }
 
     /**
@@ -291,35 +309,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @var string The hashed password
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $isBanned = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity=HostedFile::class, mappedBy="user")
-     */
-    private $files;
-
-    /**
-     * @ORM\Column(type="integer", length=60, nullable=true)
-     * @groups("user:read", "file:read")
-     */
-    private int $totalSpaceUsedMo = 0;
-
-    /**
-     * @ORM\Column(type="integer", length=60, nullable=true)
-     * @groups("user:read", "file:read")
-     */
-    private $authorizedSizeMo = 100;
-
-    /**
-     * @ORM\Column(type="datetime", length=60, nullable=true)
-     * @groups("user:read", "file:read")
-     */
-    private \DateTimeInterface $registrationDate;
-
-    /**
      * @return \DateTimeInterface
      */
     public function getRegistrationDate(): \DateTimeInterface
@@ -423,7 +412,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setLogin(string $login): self
     {
-        $this->login = $login;
+        $this->login = strtolower($login);
 
         return $this;
     }

@@ -7,13 +7,13 @@ use App\Entity\User;
 use DateTimeZone;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-     private $passwordEncoder;
+     private UserPasswordHasherInterface $passwordEncoder;
 
-     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+     public function __construct(UserPasswordHasherInterface $passwordEncoder)
      {
          $this->passwordEncoder = $passwordEncoder;
      }
@@ -37,7 +37,7 @@ class UserFixtures extends Fixture
             $user = new User();
             $user->setLogin($item['login']);
             $user->setRoles($item['roles']);
-            $user->setPassword($this->passwordEncoder->encodePassword($user,
+            $user->setPassword($this->passwordEncoder->hashPassword($user,
                 $item['pass']
             ));
 

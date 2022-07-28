@@ -8,15 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class UsersController extends AbstractController
 {
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordEncoder;
     private DenormalizerInterface $denormalizer;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, DenormalizerInterface $denormalizer)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder, DenormalizerInterface $denormalizer)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->denormalizer = $denormalizer;
@@ -89,7 +89,7 @@ class UsersController extends AbstractController
         $user->setRoles($data->roles);
         $user->setRegistrationDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         $user->setSecretTokenForValidation(md5(uniqid(mt_rand(), true)).md5(uniqid(mt_rand(), true)));
-        $user->setPassword($this->passwordEncoder->encodePassword($user,
+        $user->setPassword($this->passwordEncoder->hashPassword($user,
             $data->password
         ));
 
@@ -112,7 +112,7 @@ class UsersController extends AbstractController
         empty($data['login']) ? true : $user->setLogin($data['login']);
         empty($data['roles']) ? true : $user->setRoles($data['roles']);
 
-        empty($data['password']) ? true : $user->setPassword($this->passwordEncoder->encodePassword($user,
+        empty($data['password']) ? true : $user->setPassword($this->passwordEncoder->hashPassword($user,
             $data['password']
         ));
 
