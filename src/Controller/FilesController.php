@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\HostedFileRepository;
 use Psr\Log\LoggerInterface;
 use App\Service\Converter;
+use Doctrine\Persistence\ManagerRegistry;
 
 class FilesController extends AbstractController
 {
@@ -41,7 +42,7 @@ class FilesController extends AbstractController
      * TO DO
      * @Route("/api/files/upload", name="app_files_upload")
      */
-    public function upload(Request $request, LoggerInterface $logger, string $hostingDirectory, string $projectDirectory): Response
+    public function upload(Request $request, LoggerInterface $logger, ManagerRegistry $doctrine): Response
     {
         if (empty($request->files) || !($request->files)->get("file")) {
             throw new \Exception('No file sent');
@@ -77,7 +78,7 @@ class FilesController extends AbstractController
         $file->setConversionsAvailable('');
         $file->setVirtualDirectory('/');
 
-        $manager = $this->getDoctrine()->getManager();
+        $manager = $doctrine->getManager();
         $manager->persist($file);
         $manager->flush($file);
 
@@ -146,7 +147,7 @@ class FilesController extends AbstractController
     /**
      * @Route("/api/files/delete/{fileId}", name="app_files_delete", methods={"DELETE"})
      */
-    public function deleteById(Request $request, HostedFileRepository $hostedFileRepository): Response
+    public function deleteById(Request $request, HostedFileRepository $hostedFileRepository, ManagerRegistry $doctrine): Response
     {
         $userId = ($this->getUser())->getId();
         $id = $request->get("fileId");
@@ -166,7 +167,7 @@ class FilesController extends AbstractController
             throw $this->createNotFoundException('The file does not exist');
         }
 
-        $manager = $this->getDoctrine()->getManager();
+        $manager = $doctrine->getManager();
         $manager->remove($result);
         $manager->flush();
 

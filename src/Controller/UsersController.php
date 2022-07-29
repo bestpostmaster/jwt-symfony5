@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,7 @@ class UsersController extends AbstractController
      * @Route("/api/admin/edit-user/{userId}", name="edit_user")
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    public function editUserInfos(Request $request, UserRepository $userRepository): Response
+    public function editUserInfos(Request $request, UserRepository $userRepository, ManagerRegistry $doctrine): Response
     {
         if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw new \Exception('Admin only !');
@@ -66,7 +67,7 @@ class UsersController extends AbstractController
         }
 
         $user = $this->hydrateUser($request, $user);
-        $em = $this->getDoctrine()->getManager();
+        $em = $doctrine->getManager();
         $em->persist($user);
         $em->flush();
 
@@ -76,7 +77,7 @@ class UsersController extends AbstractController
     /**
      * @Route("/api/admin/users/add", name="app_users_add")
      */
-    public function add(Request $request): Response
+    public function add(Request $request, ManagerRegistry $doctrine): Response
     {
         if(!$this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw new \Exception('Admin only !');
@@ -93,7 +94,7 @@ class UsersController extends AbstractController
             $data->password
         ));
 
-        $manager = $this->getDoctrine()->getManager();
+        $manager = $doctrine->getManager();
         $manager->persist($user);
         $manager->flush($user);
 
