@@ -28,13 +28,10 @@ class FilesControllerTest extends WebTestCase
 
         $this->client->loginUser($admin);
 
-        $fixturesPathFromRoot = '/src/DataFixtures/Files/df5g4h6df5g4h6f5g4h6fdgh6f5g1h6fg51h.mp4';
+        $fixturesPathFromRoot = dirname(__DIR__, 3).'/src/DataFixtures/Files/';
+        $fileName = scandir($fixturesPathFromRoot, 1)[0];
 
-        $path = (DIRECTORY_SEPARATOR === '\\')
-            ? str_replace('/', '\\', $fixturesPathFromRoot)
-            : str_replace('\\', '/', $fixturesPathFromRoot);
-
-        $fullFilePath = dirname(__DIR__, 3).$path;
+        $fullFilePath = $fixturesPathFromRoot.$fileName;
 
         $uploadedFile = new UploadedFile(
             $fullFilePath,
