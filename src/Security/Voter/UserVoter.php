@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Security;
+use App\Entity\User;
 
 class UserVoter extends Voter
 {
@@ -28,14 +29,14 @@ class UserVoter extends Voter
 
         if (is_array($subject) && !empty($subject)) {
             foreach ($subject as $item) {
-                if (!($item instanceof \App\Entity\User)) {
+                if (!($item instanceof User)) {
                     return false;
                 }
             }
             return true;
         }
 
-        return $subject instanceof \App\Entity\User;
+        return $subject instanceof User;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

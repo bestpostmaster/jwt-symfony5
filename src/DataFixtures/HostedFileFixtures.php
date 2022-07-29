@@ -134,7 +134,9 @@ class HostedFileFixtures extends Fixture implements DependentFixtureInterface
     public function copyFilesFixtures(): void {
 
         if (!is_dir($this->hostingDirectory)) {
-            mkdir($this->hostingDirectory);
+            if (!mkdir($concurrentDirectory = $this->hostingDirectory) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
         }
 
         $names = $this->getFilesNames();

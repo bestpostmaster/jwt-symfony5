@@ -73,7 +73,7 @@ class FilesController extends AbstractController
         $file->setFilePassword($request->get("filePassword") ?? '');
         $file->setDownloadCounter(0);
         $file->setUrl(md5(uniqid(mt_rand(), true)).md5(uniqid(mt_rand(), true)));
-        $file->setUploadLocalisation($_SERVER['REMOTE_ADDR']);
+        $file->setUploadLocalisation($_SERVER['REMOTE_ADDR'] ?? '');
         $file->setCopyrightIssue(false);
         $file->setConversionsAvailable('');
         $file->setVirtualDirectory('/');
