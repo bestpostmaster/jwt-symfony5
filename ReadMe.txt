@@ -4,6 +4,7 @@ An admin exists, and he has endpoints that allow him to manage users
 Installation
 -------------------------------------------------------------------
 composer install
+<!on debian 10!> sudo composer require ext-dom
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 
