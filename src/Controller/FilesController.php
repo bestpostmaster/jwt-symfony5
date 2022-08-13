@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\HostedFile;
+use App\Message\VirusScannerMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\HostedFileRepository;
 use Psr\Log\LoggerInterface;
@@ -42,7 +44,7 @@ class FilesController extends AbstractController
      * TO DO
      * @Route("/api/files/upload", name="app_files_upload")
      */
-    public function upload(Request $request, LoggerInterface $logger, ManagerRegistry $doctrine, VirusScannerService $virusScannerService): Response
+    public function upload(Request $request, LoggerInterface $logger, ManagerRegistry $doctrine, VirusScannerService $virusScannerService, MessageBusInterface $bus): Response
     {
         if (empty($request->files) || !($request->files)->get("file")) {
             throw new \Exception('No file sent');
@@ -82,7 +84,10 @@ class FilesController extends AbstractController
         $manager->persist($file);
         $manager->flush($file);
 
-        $virusScannerService->scan($file);
+        //Without Messenger
+        //$virusScannerService->scan($file);
+
+        $bus->dispatch(new VirusScannerMessage($file->getId()));
 
         return $this->json($file, 200, [], ['groups' => 'file:read']);
     }

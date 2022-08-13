@@ -40,6 +40,10 @@ After update fixtures, use this command :
 php bin/console doctrine:fixtures:load
 
 JSON Collection for Postman
+
+Run Worker to consume messages :
+php bin/console messenger:consume async -vv
+
 -------------------------------------------------------------------
 https://www.postman.com/collections/880b957ed4b9cdded6bf
 

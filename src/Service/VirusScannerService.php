@@ -16,7 +16,6 @@ class VirusScannerService
 
     public function scan(HostedFile $hostedFile):void
     {
-        sleep(3);
         $hostedFile->setScaned(true);
         $em = $this->doctrine->getManager();
         $em->persist($hostedFile);
