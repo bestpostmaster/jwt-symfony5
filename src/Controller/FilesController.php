@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\HostedFileRepository;
 use Psr\Log\LoggerInterface;
-use App\Service\Converter;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\VirusScannerService;
 
 class FilesController extends AbstractController
 {
@@ -42,7 +42,7 @@ class FilesController extends AbstractController
      * TO DO
      * @Route("/api/files/upload", name="app_files_upload")
      */
-    public function upload(Request $request, LoggerInterface $logger, ManagerRegistry $doctrine): Response
+    public function upload(Request $request, LoggerInterface $logger, ManagerRegistry $doctrine, VirusScannerService $virusScannerService): Response
     {
         if (empty($request->files) || !($request->files)->get("file")) {
             throw new \Exception('No file sent');
@@ -81,6 +81,8 @@ class FilesController extends AbstractController
         $manager = $doctrine->getManager();
         $manager->persist($file);
         $manager->flush($file);
+
+        $virusScannerService->scan($file);
 
         return $this->json($file, 200, [], ['groups' => 'file:read']);
     }

@@ -124,6 +124,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/sodium_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/doctrine-messenger" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/messenger" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/amqp-messenger" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/redis-messenger" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
