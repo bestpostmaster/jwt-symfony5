@@ -5,6 +5,10 @@ Installation
 -------------------------------------------------------------------
 composer install
 <!on debian 10!> sudo composer require ext-dom
+
+!!VAULT!! Check user name and database name in .env file and trun this command to choose the password : 
+php bin/console secrets:set DATABASE_PASSWORD
+
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 
