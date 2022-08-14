@@ -58,11 +58,43 @@ class HostedFile
     private string $virtualDirectory;
 
     /**
+     * @return bool
+     */
+    public function isInfected(): bool
+    {
+        return $this->infected;
+    }
+
+    /**
+     * @param bool $infected
+     */
+    public function setInfected(bool $infected): void
+    {
+        $this->infected = $infected;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getScanResult(): ?string
+    {
+        return $this->scanResult;
+    }
+
+    /**
+     * @param string|null $scanResult
+     */
+    public function setScanResult(?string $scanResult): void
+    {
+        $this->scanResult = $scanResult;
+    }
+
+    /**
      * Size in MB
      * @ORM\Column(type="float")
      * @groups("file:read")
      */
-    private $size;
+    private float $size;
 
     /**
      * @ORM\Column(type="boolean")
@@ -71,22 +103,34 @@ class HostedFile
     private $scaned;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : false})
+     * @groups("file:read")
+     */
+    private bool $infected = false;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @groups("file:read")
      */
-    private $description;
+    private ?string $scanResult;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @groups("file:read")
+     */
+    private string $description;
 
     /**
      * @ORM\Column(type="bigint")
      * @groups("file:read")
      */
-    private $downloadCounter;
+    private int $downloadCounter;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @groups("file:read")
      */
-    private $url;
+    private string $url;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -98,13 +142,13 @@ class HostedFile
      * @ORM\Column(type="boolean")
      * @groups("file:read")
      */
-    private $copyrightIssue;
+    private bool $copyrightIssue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @groups("file:read")
      */
-    private $conversionsAvailable;
+    private string $conversionsAvailable;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

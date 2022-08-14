@@ -11,8 +11,9 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $hostingDirectory: '%env(resolve:HOSTING_DIRECTORY)%'
             $projectDirectory: '%kernel.project_dir%'
+            $hostingDirectory: '%env(resolve:HOSTING_DIRECTORY)%'
+            $quarantineDirectory: '%env(resolve:QUARANTINE_DIRECTORY)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
